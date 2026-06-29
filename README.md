@@ -4,7 +4,7 @@ Hoja de vida profesional de **Camilo Andrés García Almeida**, desarrollador de
 
 El documento es un único PDF que incluye **dos versiones** (español e inglés) y, al final, el **certificado del Hackathon Visual Agents** como respaldo.
 
-📎 **Archivo:** [`HojaDeVida_CamiloGarcia.pdf`](./HojaDeVida_CamiloGarcia.pdf)
+📎 **Archivo:** [`HojaDeVida_Profesional_CamiloGarcia.pdf`](./HojaDeVida_Profesional_CamiloGarcia.pdf)
 
 ---
 
