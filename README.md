@@ -6,6 +6,7 @@ Hoja de vida de **Camilo Andrés García Almeida**, Técnico en Desarrollo de So
 
 | Formato | Archivo | Para qué sirve |
 |---|---|---|
+| **Personalizada** (español) | [HojaDeVida_Personalizada_CamiloGarcia.pdf](HojaDeVida_Personalizada_CamiloGarcia.pdf) | Diseño propio de dos páginas: acerca de mí, habilidades técnicas y blandas con ejemplos reales, experiencia con logros, educación, certificaciones e idiomas. |
 | **ATS** (español) | [HojaDeVida_ATS_CamiloGarcia.pdf](HojaDeVida_ATS_CamiloGarcia.pdf) | Una sola columna, solo texto y enlaces completos. Es la que leen bien las plataformas de empleo que filtran hojas de vida de forma automática. |
 | **Campus** (español) | [HojaDeVida_Campus_ES_CamiloGarcia.pdf](HojaDeVida_Campus_ES_CamiloGarcia.pdf) | Formato oficial de CampusLands, de una página y con foto. |
 | **Campus** (inglés) | [HojaDeVida_Campus_EN_CamiloGarcia.pdf](HojaDeVida_Campus_EN_CamiloGarcia.pdf) | La misma hoja Campus en inglés. |
@@ -20,6 +21,7 @@ Los PDF salen de [`fuente/`](fuente):
 
 - `datos.py`: todo el contenido, en español e inglés.
 - `generar.py`: arma un HTML por versión (Campus en español e inglés, ATS en español) y los imprime como PDF tamaño A4.
+- `personalizada.py`: contenido y diseño de la hoja personalizada (se ejecuta con `python3 personalizada.py`).
 - `imprimir.js`: imprime los HTML con Chromium (Playwright).
 
 Para actualizar la hoja de vida se edita `datos.py` y se ejecuta:
