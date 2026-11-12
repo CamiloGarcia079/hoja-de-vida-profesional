@@ -16,84 +16,113 @@ SALIDA = os.path.join(AQUI, 'salida')
 RAIZ = os.path.dirname(AQUI)
 os.makedirs(SALIDA, exist_ok=True)
 
-NAVY = '#16295a'
+import json as _json
+_ICONOS_MARCA = _json.load(open(os.path.join(AQUI, 'iconos.json')))
+NAVY = '#0e2359'
+FRANJA = '#394374'
 
-ICONOS = {  # trazos de 24x24 para "Datos personales"
-    'linkedin': '<path d="M6.5 9.5v8M6.5 6.5v.01M10.5 17.5v-4.5a2.5 2.5 0 0 1 5 0v4.5M10.5 9.5v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
-    'github': '<path d="M12 3.5a8.5 8.5 0 0 0-2.7 16.6c.4 0 .6-.2.6-.4v-1.6c-2.4.5-2.9-1-2.9-1-.4-1-1-1.3-1-1.3-.8-.5 0-.5 0-.5.9.1 1.4.9 1.4.9.8 1.3 2 1 2.5.7.1-.6.3-1 .6-1.2-1.9-.2-3.9-1-3.9-4.2 0-.9.3-1.7.9-2.3-.1-.2-.4-1.1.1-2.2 0 0 .7-.2 2.3.9a8 8 0 0 1 4.2 0c1.6-1.1 2.3-.9 2.3-.9.5 1.1.2 2 .1 2.2.6.6.9 1.4.9 2.3 0 3.2-2 4-3.9 4.2.3.3.6.8.6 1.6v2.4c0 .2.2.5.6.4A8.5 8.5 0 0 0 12 3.5z" fill="currentColor"/>',
-    'portafolio': '<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 12h16M12 4c2.2 2.3 3.2 5 3.2 8s-1 5.7-3.2 8c-2.2-2.3-3.2-5-3.2-8s1-5.7 3.2-8z" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+# Íconos rellenos de "Datos personales", como en la plantilla oficial
+ICONOS_CAMPUS = {
+    'linkedin': f'<svg viewBox="0 0 24 24"><path fill="{NAVY}" d="{_ICONOS_MARCA["linkedin"]}"/></svg>',
+    'github': f'<svg viewBox="0 0 24 24"><path fill="{NAVY}" d="{_ICONOS_MARCA["github"]}"/></svg>',
+    'portafolio': (f'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="{NAVY}"/>'
+                   '<path fill="#fff" d="M9.5 7.5V6.6c0-.6.5-1.1 1.1-1.1h2.8c.6 0 1.1.5 1.1 1.1v.9h2.6c.8 0 1.4.6 1.4 1.4v2.3H5.5V8.9c0-.8.6-1.4 1.4-1.4h2.6zm1.4 0h2.2v-.6h-2.2v.6zM5.5 12.2h5.6v1.1h1.8v-1.1h5.6v4.4c0 .8-.6 1.4-1.4 1.4H6.9c-.8 0-1.4-.6-1.4-1.4v-4.4z"/></svg>'),
 }
 
 
 # ------------------------------------------------------------------ formato Campus
+# Réplica de la plantilla oficial de CampusLands: foto grande a la izquierda, encabezado azul con el
+# nombre, franja con el rol, columnas de perfil/formación/experiencia y habilidades/competencias/
+# datos personales/idiomas, y pie con el logo.
 def campus(lang):
     d = CAMPUS[lang]
     perfil, formacion, experiencia, habilidades, competencias, datos, idiomas = d['secciones']
     form = ''.join(f'''
-        <div class="item"><h4>{e(t)}</h4><div class="meta"><span>{e(lugar)}</span><span>{e(fecha)}</span></div></div>'''
+        <div class="form"><h4>{e(t)}</h4><div class="meta"><span>{e(lugar)}</span><span>{e(fecha)}</span></div></div>'''
                    for t, lugar, fecha in d['formacion'])
     exp = ''.join(f'''
-        <div class="item"><h4><a href="{REPOS[k]}">{e(t)}</a></h4><p class="tec">{e(tec)}</p><p class="txt">{e(txt)}</p></div>'''
+        <div class="exp"><h4><a href="{REPOS[k]}">{e(t)}</a></h4><p class="tec">{e(tec)}</p><p class="txt">{e(txt)}</p></div>'''
                   for k, t, tec, txt in d['experiencia'])
     contacto = ''.join(f'''
-        <li><a href="{ENLACES[k]}"><span class="ico"><svg viewBox="0 0 24 24">{ICONOS[k]}</svg></span>{e(n)}</a></li>'''
+        <li><a href="{ENLACES[k]}"><span class="ico">{ICONOS_CAMPUS[k]}</span><u>{e(n)}</u></a></li>'''
                        for k, n in d['datos'])
+    dos_col = lambda items: ''.join(f'<li>{e(x)}</li>' for x in items)
+    fuente = lambda nombre, archivo, peso: (f"@font-face {{ font-family: '{nombre}'; src: url('../fuentes/{archivo}'); "
+                                            f"font-weight: {peso}; }}")
     return f'''<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><title>Camilo Andrés García Almeida</title><style>
+{fuente('Libre Baskerville', 'LibreBaskerville[wght].ttf', '400 700')}
+{fuente('Poppins', 'Poppins-Light.ttf', 300)}
+{fuente('Poppins', 'Poppins-Regular.ttf', 400)}
+{fuente('Poppins', 'Poppins-Medium.ttf', 500)}
+{fuente('Noto Sans', 'NotoSans[wdth,wght].ttf', '100 900')}
 @page {{ size: A4; margin: 0; }}
 * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-body {{ width: 210mm; height: 297mm; position: relative; font-family: 'Liberation Sans', Arial, sans-serif; color: #222; font-size: 8.6pt; }}
+body {{ width: 210mm; height: 297mm; position: relative; overflow: hidden; font-family: 'Noto Sans', sans-serif; color: #1f1f1f; font-size: 9.2pt; line-height: 1.32; }}
 a {{ color: inherit; text-decoration: none; }}
-header {{ display: grid; grid-template-columns: 52mm 1fr; height: 46mm; }}
-.foto {{ position: relative; background: url(foto.jpg) center 28% / cover; }}
-.foto::after {{ content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 9mm; background: {NAVY}; clip-path: polygon(100% 0, 100% 100%, 0 100%); }}
-.cab {{ background: {NAVY}; color: #fff; display: grid; grid-template-rows: 1fr 11mm; }}
-.cab h1 {{ align-self: center; text-align: center; font: 700 24pt/1.12 'Liberation Serif', serif; }}
-.cab p {{ border-top: 1px solid rgba(255,255,255,.4); display: grid; place-items: center; font: 400 12pt 'Liberation Serif', serif; letter-spacing: .06em; }}
-main {{ display: grid; grid-template-columns: 1fr 1px 70mm; gap: 0 9mm; padding: 9mm 10mm 0 10mm; height: calc(297mm - 46mm - 17mm); }}
-.sep {{ background: #d9dbe0; margin-top: -9mm; }}
-h3 {{ font: 700 13.5pt 'Liberation Serif', serif; letter-spacing: .3em; text-transform: uppercase; color: #111; margin-bottom: 3.6mm; line-height: 1.15; }}
-section {{ padding-bottom: 4.6mm; margin-bottom: 5mm; border-bottom: 1px solid #d9dbe0; }}
-section:last-child {{ border-bottom: 0; }}
-.perfil {{ text-align: justify; line-height: 1.5; }}
-.item {{ margin-bottom: 3mm; }}
-.item:last-child {{ margin-bottom: 0; }}
-h4 {{ font-size: 10.6pt; font-weight: 700; color: #1a1a1a; line-height: 1.25; }}
-.meta {{ display: flex; justify-content: space-between; gap: 4mm; color: #8d929b; font-size: 8.2pt; margin-top: .4mm; }}
+/* Encabezado */
+.foto {{ position: absolute; left: 0; top: 0; width: 82.4mm; height: 57.3mm; background: url(foto_campus.jpg) 57% 30% / 125% auto no-repeat; }}
+.cab {{ position: absolute; left: 82.4mm; right: 0; top: 0; height: 39.6mm; background: {NAVY}; display: grid; place-items: center; }}
+.cab h1 {{ font: 700 25pt/1.22 'Libre Baskerville', serif; color: #fff; text-align: center; }}
+.esquina {{ position: absolute; right: 0; top: 25.8mm; width: 14mm; height: 13.8mm; background: {FRANJA}; clip-path: polygon(100% 0, 100% 100%, 0 100%); }}
+.franja {{ position: absolute; left: 82.4mm; right: 0; top: 39.6mm; height: 17.7mm; background: {FRANJA}; display: grid; place-items: center; }}
+.franja p {{ font: 700 12.5pt 'Libre Baskerville', serif; color: #fff; letter-spacing: .08em; }}
+/* Columnas */
+.izq {{ position: absolute; left: 5mm; top: 59.5mm; width: 118mm; }}
+.sep {{ position: absolute; left: 131.4mm; top: 61mm; width: .6mm; height: 219mm; background: #d6d6d6; }}
+.der {{ position: absolute; left: 136mm; top: 61mm; right: 4mm; }}
+h3 {{ font: 400 16pt/1.1 'Poppins', sans-serif; letter-spacing: .32em; text-transform: uppercase; color: #1f1f1f; }}
+.izq section {{ padding-bottom: 3mm; margin-bottom: 3.2mm; border-bottom: .8mm solid #d6d6d6; margin-right: 4mm; }}
+.der section {{ padding: 0 0 3.2mm 3.5mm; margin-bottom: 3.6mm; border-bottom: .8mm solid #d6d6d6; margin-left: -2mm; }}
+section:last-child {{ border-bottom: 0 !important; }}
+.perfil {{ margin-top: .8mm; }}
+.izq h3 {{ margin-bottom: 2.2mm; }}
+.form {{ margin-bottom: 2.2mm; }}
+.form h4 {{ font: 400 12.2pt 'Noto Sans', sans-serif; color: #1f1f1f; }}
+.meta {{ display: flex; justify-content: space-between; gap: 6mm; color: #7d7d7d; font-size: 10pt; margin-top: .8mm; }}
 .meta span:last-child {{ white-space: nowrap; }}
-.tec {{ color: #8d929b; font-size: 8pt; margin: .4mm 0 .8mm; }}
-.txt {{ text-align: justify; line-height: 1.45; }}
+.exp {{ margin-bottom: 3mm; }}
+.exp h4 {{ font: 400 11pt 'Noto Sans', sans-serif; color: #1f1f1f; }}
+.tec {{ color: #9a9a9a; font-size: 7.6pt; margin: .2mm 0 .8mm; }}
+.txt {{ font-size: 9.3pt; text-align: justify; }}
+.der h3 {{ margin-bottom: 2.6mm; }}
 ul {{ list-style: none; }}
-.puntos li {{ position: relative; padding-left: 6mm; font-size: 9.8pt; line-height: 1.9; }}
-.puntos li::before {{ content: ''; position: absolute; left: 0; top: 2.5mm; width: 2.4mm; height: 2.4mm; border-radius: 50%; background: {NAVY}; }}
-.dos {{ display: grid; grid-template-columns: 1fr 1fr; gap: 0 3mm; }}
-.dos li {{ font-size: 8.4pt; line-height: 1.5; padding-left: 4.6mm; margin-bottom: 1.4mm; }}
-.dos li::before {{ top: 1.4mm; width: 1.8mm; height: 1.8mm; }}
-.contacto li {{ margin-bottom: 2.6mm; font-size: 9.8pt; }}
-.contacto a {{ display: flex; align-items: center; gap: 3mm; }}
-.ico {{ width: 6mm; height: 6mm; border: 1.3px solid {NAVY}; border-radius: 1.4mm; display: grid; place-items: center; color: #111; }}
-.ico svg {{ width: 4.2mm; height: 4.2mm; }}
-footer {{ position: absolute; left: 0; right: 0; bottom: 0; height: 17mm; background: {NAVY}; display: flex; justify-content: flex-end; align-items: center; padding-right: 7mm; }}
-footer img {{ height: 11.5mm; }}
+.cols {{ display: grid; grid-template-columns: 1fr 1fr; column-gap: 3mm; }}
+.cols li {{ position: relative; padding-left: 4mm; }}
+.cols li::before {{ content: ''; position: absolute; left: .4mm; width: 1.5mm; height: 1.5mm; border-radius: 50%; background: #1f1f1f; }}
+.hab li {{ font-size: 12.2pt; line-height: 1.7; }}
+.hab li::before {{ top: 2.7mm; }}
+.hab li:last-child:nth-child(odd) {{ grid-column: 1 / -1; justify-self: center; }}
+.comp li {{ font-size: 8.8pt; line-height: 1.6; }}
+.comp li::before {{ top: 1.6mm; width: 1.1mm; height: 1.1mm; }}
+.datos h3, .idiomas h3 {{ font-size: 13pt; letter-spacing: .34em; margin-left: 2.5mm; }}
+.contacto {{ margin: 3.5mm 0 0 1mm; }}
+.contacto li {{ margin-bottom: 2.8mm; font-size: 9.6pt; }}
+.contacto a {{ display: flex; align-items: center; gap: 3.2mm; }}
+.ico svg {{ width: 5.6mm; height: 5.6mm; display: block; }}
+.idio {{ margin: 2.5mm 0 0 5mm; }}
+.idio li {{ position: relative; padding-left: 4.5mm; font-size: 9.4pt; line-height: 2.2; }}
+.idio li::before {{ content: ''; position: absolute; left: 0; top: 2.4mm; width: 1.4mm; height: 1.4mm; border-radius: 50%; background: #1f1f1f; }}
+/* Pie */
+footer {{ position: absolute; left: 0; right: 0; bottom: 0; height: 15.2mm; background: {NAVY}; }}
+footer img {{ position: absolute; right: 5mm; top: 2mm; height: 11.2mm; }}
 </style></head><body>
-<header>
-  <div class="foto"></div>
-  <div class="cab"><h1>Camilo Andrés<br>García Almeida</h1><p>{e(d['rol'])}</p></div>
-</header>
-<main>
-  <div>
-    <section><h3>{e(perfil)}</h3><p class="perfil">{e(d['perfil'])}</p></section>
-    <section><h3>{e(formacion)}</h3>{form}</section>
-    <section><h3>{e(experiencia)}</h3>{exp}</section>
-  </div>
-  <div class="sep"></div>
-  <div>
-    <section><h3>{e(habilidades)}</h3><ul class="puntos">{''.join(f'<li>{e(h)}</li>' for h in d['habilidades'])}</ul></section>
-    <section><h3>{e(competencias)}</h3><ul class="puntos dos">{''.join(f'<li>{e(c)}</li>' for c in d['competencias'])}</ul></section>
-    <section><h3>{e(datos)}</h3><ul class="contacto">{contacto}</ul></section>
-    <section><h3>{e(idiomas)}</h3><ul class="puntos">{''.join(f'<li>{e(i)}</li>' for i in d['idiomas'])}</ul></section>
-  </div>
-</main>
-<footer><img src="campuslands_horizontal.png" alt="Campuslands"></footer>
+<div class="foto"></div>
+<div class="cab"><h1>Camilo Andrés<br>García Almeida</h1></div>
+<div class="esquina"></div>
+<div class="franja"><p>{e(d['rol'])}</p></div>
+<div class="izq">
+  <section><h3>{e(perfil)}</h3><p class="perfil">{e(d['perfil'])}</p></section>
+  <section><h3>{e(formacion)}</h3>{form}</section>
+  <section><h3>{e(experiencia)}</h3>{exp}</section>
+</div>
+<div class="sep"></div>
+<div class="der">
+  <section><h3>{e(habilidades)}</h3><ul class="cols hab">{dos_col(d['habilidades'])}</ul></section>
+  <section><h3>{e(competencias)}</h3><ul class="cols comp">{dos_col(d['competencias'])}</ul></section>
+  <section class="datos"><h3>{e(datos)}</h3><ul class="contacto">{contacto}</ul></section>
+  <section class="idiomas"><h3>{e(idiomas)}</h3><ul class="idio">{''.join(f'<li>{e(i)}</li>' for i in d['idiomas'])}</ul></section>
+</div>
+<footer><img src="campuslands_logo.png" alt="Campuslands"></footer>
 </body></html>'''
 
 
@@ -155,7 +184,7 @@ VERSIONES = {
 for nombre, html in VERSIONES.items():
     with open(os.path.join(SALIDA, nombre + '.html'), 'w', encoding='utf-8') as f:
         f.write(html)
-for rec in ('foto.jpg', 'campuslands_horizontal.png'):
+for rec in ('foto_campus.jpg', 'campuslands_logo.png'):
     with open(os.path.join(AQUI, rec), 'rb') as src, open(os.path.join(SALIDA, rec), 'wb') as dst:
         dst.write(src.read())
 

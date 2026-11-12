@@ -28,3 +28,5 @@ Para actualizar la hoja de vida se edita `datos.py` y se ejecuta:
 cd fuente
 python3 generar.py
 ```
+
+Las fuentes de `fuente/fuentes/` (Libre Baskerville, Poppins y Noto Sans) son de Google Fonts, con licencia SIL Open Font License.
