@@ -1,24 +1,27 @@
-# Hoja de Vida Profesional — Camilo García
+# Hoja de vida · Camilo García
 
-Hoja de vida profesional de **Camilo Andrés García Almeida**, desarrollador de software junior, correspondiente a la segunda entrega de Hoja de Vida de Empleabilidad N2.
+Hoja de vida de **Camilo Andrés García Almeida**, Técnico en Desarrollo de Software e Inteligencia Artificial (CampusLands) y Junior Developer enfocado en automatización, bots y desarrollo web.
 
-El documento es un único PDF que incluye **dos versiones** (español e inglés) y, al final, el **certificado del Hackathon Visual Agents** como respaldo.
+## Versiones
 
- **Archivo:** [`HojaDeVida_Profesional_CamiloGarcia.pdf`](./HojaDeVida_Profesional_CamiloGarcia.pdf)
+| Formato | Español | Inglés | Para qué sirve |
+|---|---|---|---|
+| **Campus** | [PDF](HojaDeVida_Campus_ES_CamiloGarcia.pdf) | [PDF](HojaDeVida_Campus_EN_CamiloGarcia.pdf) | Versión visual de una página, con foto y el formato de CampusLands. Para enviar directamente a una persona. |
+| **ATS** | [PDF](HojaDeVida_ATS_ES_CamiloGarcia.pdf) | [PDF](HojaDeVida_ATS_EN_CamiloGarcia.pdf) | Una sola columna, sin imágenes ni tablas. Para plataformas de empleo que filtran hojas de vida de forma automática. |
 
----
+También está el [certificado del Hackathon Visual Agents](Certificado_Hackathon_VisualAgents.pdf) (junio de 2026).
 
-## Contenido
+## Cómo se generan
 
-- Perfil profesional
-- Habilidades técnicas (Python, JavaScript, HTML, CSS, MySQL, Git, n8n…)
-- Habilidades blandas con ejemplos reales (trabajo en equipo y resolución de problemas bajo presión en el hackathon GUARDIAN)
-- Experiencia y proyectos (GUARDIAN, DeliveryBot, Campus Pizza)
-- Formación académica
-- Certificación del Hackathon Visual Agents (página anexa)
+Los PDF salen de [`fuente/`](fuente):
 
----
+- `datos.py`: todo el contenido, en español e inglés.
+- `generar.py`: arma un HTML por versión (Campus y ATS) y los imprime como PDF tamaño A4.
+- `imprimir.js`: imprime los HTML con Chromium (Playwright).
 
-**Camilo Andrés García Almeida**
-Técnico en Desarrollo de Software e Inteligencia Artificial — CampusLands
-[GitHub](https://github.com/CamiloGarcia079) · [LinkedIn](https://www.linkedin.com/in/camilo-garcia-7570693b7/) · [Portafolio](https://camilogarcia079.github.io/portafolio/)
+Para actualizar la hoja de vida se edita `datos.py` y se ejecuta:
+
+```bash
+cd fuente
+python3 generar.py
+```
