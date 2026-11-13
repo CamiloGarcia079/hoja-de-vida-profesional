@@ -9,6 +9,7 @@ Los PDF quedan en la raíz del repositorio, con enlaces que se pueden hacer clic
 import os
 import subprocess
 from html import escape as e
+from urllib.parse import unquote
 from datos import ENLACES, TELEFONO, CORREO, CIUDAD, REPOS, CAMPUS, ATS
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
@@ -129,7 +130,7 @@ footer img {{ position: absolute; right: 5mm; top: 2mm; height: 11.2mm; }}
 # ------------------------------------------------------------------ formato ATS (español)
 def ats():
     a = ATS
-    url = lambda u: f'<a href="{u}">{e(u)}</a>'
+    url = lambda u: f'<a href="{u}">{e(unquote(u))}</a>'
     contacto = (f'Correo: <a href="mailto:{CORREO}">{CORREO}</a> | Teléfono: {e(TELEFONO)} | {e(CIUDAD)}<br>'
                 f'LinkedIn: {url(ENLACES["linkedin"])}<br>'
                 f'GitHub: {url(ENLACES["github"])}<br>'

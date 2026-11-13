@@ -4,7 +4,7 @@ mismos lenguajes, mismos cuatro proyectos destacados, mismas habilidades blandas
 """
 
 ENLACES = {
-    'linkedin': 'https://www.linkedin.com/in/camilo-garcia-7570693b7/',
+    'linkedin': 'https://www.linkedin.com/in/camilo-andr%C3%A9s-garc%C3%ADa-almeida-7570693b7/',
     'github': 'https://github.com/CamiloGarcia079',
     'portafolio': 'https://camilogarcia079.github.io/portafolio/',
 }

@@ -143,7 +143,7 @@ def html():
     contacto = [
         ('correo', CORREO, f'mailto:{CORREO}'), ('tel', TELEFONO, 'tel:+573043962022'),
         ('lugar', 'Bucaramanga, Colombia', None), ('web', 'camilogarcia079.github.io/portafolio', ENLACES['portafolio']),
-        ('linkedin', 'in/camilo-garcia-7570693b7', ENLACES['linkedin']), ('github', 'github.com/CamiloGarcia079', ENLACES['github']),
+        ('linkedin', 'in/camilo-andrés-garcía-almeida-7570693b7', ENLACES['linkedin']), ('github', 'github.com/CamiloGarcia079', ENLACES['github']),
     ]
     contacto_html = ''.join(
         f'<li>{ico(k)}{f"<a href={chr(34)}{u}{chr(34)}>{e(t).replace(".io/", ".io/<wbr>")}</a>" if u else e(t)}</li>' for k, t, u in contacto)
